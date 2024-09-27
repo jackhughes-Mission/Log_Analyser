@@ -1,5 +1,5 @@
 <h1>Log Analyser</h1>
-<p>Python script to analyse log files. This is not a in depth analysis.</p>
+<p>Python script to analyse log files. This is not an in depth analysis.</p>
 
 <h2>Setup</h2>
 <ul>
