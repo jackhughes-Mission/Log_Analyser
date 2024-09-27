@@ -4,6 +4,7 @@
 <h2>Setup</h2>
 <ul>
   <li>Download this project.</li>
+  <li>Cd into project and install requirements</li>
   <li>Create a folder called 'LogFiles' in the directory that main.py is in.</li>
   <li>Put your log file inside of this folder.</li>
   <li>Run main.py</li>
@@ -16,3 +17,9 @@
   <li>See response codes and how many times they appeared.</li>
   <li>See tools used and how many times.</li>
 </ul>
+
+<h2>Requirements</h2>
+
+```
+pip install requests
+```
