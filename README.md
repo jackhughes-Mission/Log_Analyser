@@ -12,7 +12,7 @@
 
 <h2>Features</h2>
 <ul>
-  <li>See IP addresses found and how many times each one appeared.</li>
+  <li>See IP addresses found, how many times each one appeared, the country and the ISP.</li>
   <li>See requested assets and how how many times they were requested plus the response code.</li>
   <li>See response codes and how many times they appeared.</li>
   <li>See tools used and how many times.</li>
