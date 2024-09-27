@@ -21,24 +21,6 @@ def get_most_requested_files(logfilepath):
             print(f"{file} - accessed {count} times with response code {response_code}.")
 
 
-def get_most_requested_page(logfilepath):
-    page_pattern = r'(?<=GET\s)(.*?)(?=\sHTTP)'
-    page_dictionary = {}
-
-    with open(logfilepath, 'r') as file:
-        for logfilepath in file:
-            found_pages = re.findall(page_pattern, logfilepath)
-
-            for page in found_pages:
-                if page in page_dictionary:
-                    page_dictionary[page] += 1
-                else:
-                    page_dictionary[page] = 1
-
-    most_requested_page = max(page_dictionary, key=page_dictionary.get)
-    print("\nMost requested page: " + most_requested_page + " - " + " appears " + str(page_dictionary[most_requested_page]) + " times.")
-
-
 def get_all_ip_addresses(logfilepath):
     ip_pattern = r'(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
     ip_dictionary = {}
@@ -94,24 +76,28 @@ def get_tools_used(logfilepath):
 
 
 def choose_options(logfilepath):
-    print("\nChoose an option:"
-          "\n1. See IP addresses found"
-          "\n2. See requested assets"
-          "\n3. See response codes"
-          "\n4. See tools used")
+    while True:
+        print("\nChoose an option:"
+              "\n1. See IP addresses found"
+              "\n2. See requested assets"
+              "\n3. See response codes"
+              "\n4. See tools used"
+              "\n5. Choose another log file")
 
-    option = input("Enter: ")
+        option = input("Enter: ")
 
-    if option == '1':
-        get_all_ip_addresses(logfilepath)
-    elif option == '2':
-        get_most_requested_files(logfilepath)
-    elif option == '3':
-        get_response_codes(logfilepath)
-    elif option == '4':
-        get_tools_used(logfilepath)
-    else:
-        print("Invalid option")
+        if option == '1':
+            get_all_ip_addresses(logfilepath)
+        elif option == '2':
+            get_most_requested_files(logfilepath)
+        elif option == '3':
+            get_response_codes(logfilepath)
+        elif option == '4':
+            get_tools_used(logfilepath)
+        elif option == '5':
+            get_log_file()
+        else:
+            print("Invalid option")
 
 
 def read_log_file(logfilepath):
