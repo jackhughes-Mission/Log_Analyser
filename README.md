@@ -7,7 +7,7 @@
   <li>Cd into project and install requirements</li>
   <li>Create a folder called 'LogFiles' in the directory that main.py is in.</li>
   <li>Put your log file inside of this folder.</li>
-  <li>Run main.py</li>
+  <li>Run main.py.</li>
 </ul>
 
 <h2>Features</h2>
