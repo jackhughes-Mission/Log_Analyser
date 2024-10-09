@@ -1,6 +1,5 @@
 import os
 import re
-import requests
 
 def get_most_requested_files(logfilepath):
     file_pattern = r'GET\s(.*?)\sHTTP.*"\s(\d{3})'
@@ -22,29 +21,31 @@ def get_most_requested_files(logfilepath):
             print(f"{file} - accessed {count} times with response code {response_code}.")
 
 
-def get_country_and_isp(ip):
-    try:
-        # Send a request to the ipinfo.io API for geolocation and ISP data
-        response = requests.get(f'http://ipinfo.io/{ip}?token=4ee37a1361c69b')
-        data = response.json()
+def get_most_requested_page(logfilepath):
+    page_pattern = r'(?<=GET\s)(.*?)(?=\sHTTP)'
+    page_dictionary = {}
 
-        country = data.get('country', 'Unknown')
-        isp = data.get('org', 'Unknown')
+    with open(logfilepath, 'r') as file:
+        for logfilepath in file:
+            found_pages = re.findall(page_pattern, logfilepath)
 
-        return country, isp
-    except Exception as e:
-        print(f"Error fetching details for {ip}: {e}")
-        return 'Unknown', 'Unknown'
+            for page in found_pages:
+                if page in page_dictionary:
+                    page_dictionary[page] += 1
+                else:
+                    page_dictionary[page] = 1
+
+    most_requested_page = max(page_dictionary, key=page_dictionary.get)
+    print("\nMost requested page: " + most_requested_page + " - " + " appears " + str(page_dictionary[most_requested_page]) + " times.")
 
 
 def get_all_ip_addresses(logfilepath):
     ip_pattern = r'(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
     ip_dictionary = {}
 
-    # Open the log file and search for IP addresses
     with open(logfilepath, 'r') as file:
-        for line in file:
-            found_ips = re.findall(ip_pattern, line)
+        for logfilepath in file:
+            found_ips = re.findall(ip_pattern, logfilepath)
 
             for ip in found_ips:
                 if ip in ip_dictionary:
@@ -52,13 +53,10 @@ def get_all_ip_addresses(logfilepath):
                 else:
                     ip_dictionary[ip] = 1
 
-    # Sort the IPs by their occurrence
     sorted_ips = sorted(ip_dictionary.items(), key=lambda item: item[1], reverse=True)
 
-    # Print IP with country and ISP info
     for ip, count in sorted_ips:
-        country, isp = get_country_and_isp(ip)
-        print(f"IP: {ip}, Count: {count}, Country: {country}, ISP: {isp}")
+        print(f"{ip} - appears {count} times.")
 
 def get_response_codes(logfilepath):
     response_code_pattern = r'(?<=\s)(\d{3})(?=\s)'
@@ -96,28 +94,24 @@ def get_tools_used(logfilepath):
 
 
 def choose_options(logfilepath):
-    while True:
-        print("\nChoose an option:"
-              "\n1. See IP addresses found"
-              "\n2. See requested assets"
-              "\n3. See response codes"
-              "\n4. See tools used"
-              "\n5. Choose another log file")
+    print("\nChoose an option:"
+          "\n1. See IP addresses found"
+          "\n2. See requested assets"
+          "\n3. See response codes"
+          "\n4. See tools used")
 
-        option = input("Enter: ")
+    option = input("Enter: ")
 
-        if option == '1':
-            get_all_ip_addresses(logfilepath)
-        elif option == '2':
-            get_most_requested_files(logfilepath)
-        elif option == '3':
-            get_response_codes(logfilepath)
-        elif option == '4':
-            get_tools_used(logfilepath)
-        elif option == '5':
-            get_log_file()
-        else:
-            print("Invalid option")
+    if option == '1':
+        get_all_ip_addresses(logfilepath)
+    elif option == '2':
+        get_most_requested_files(logfilepath)
+    elif option == '3':
+        get_response_codes(logfilepath)
+    elif option == '4':
+        get_tools_used(logfilepath)
+    else:
+        print("Invalid option")
 
 
 def read_log_file(logfilepath):
